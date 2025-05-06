@@ -12,6 +12,37 @@ header {
   padding: 2rem 1rem;
   text-align: center;
 }
+.center-link {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+.center-link img {
+  max-width: 80%;
+  height: auto;
+}
+.center-link p {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+.game-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.game-link a {
+  text-decoration: none;
+  color: inherit;
+}
+.game-link a:hover {
+  text-decoration: underline;
+}
+
+.game-link p {
+  font-size: 1rem;
+}
 
 .gallery {
   display: flex;
@@ -39,6 +70,15 @@ header {
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
+
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #999;
+  padding: 1rem 0;
+}
+
+
 
 @media (max-width: 600px) {
   .image-card {
