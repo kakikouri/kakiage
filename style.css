@@ -70,6 +70,53 @@ header {
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
+.chat {
+  max-width: 600px;
+  margin: 3rem auto;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.chat .ai {
+  background: #e8f5ff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #007acc;
+}
+.chat .me {
+  background: #fff0f5;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #cc3366;
+}
+.chat strong {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+.quote {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  background-color: #fffbe6;
+  border-left: 4px solid #f5a623;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+.quote h2 {
+  text-align: center;
+  color: #c27c0e;
+  margin-bottom: 1rem;
+}
+.quote blockquote {
+  margin: 0;
+  font-style: italic;
+}
+
+
 
 footer {
   text-align: center;
