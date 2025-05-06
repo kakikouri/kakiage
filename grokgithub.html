@@ -1,58 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>カキアゲ応援ボタン</title>
+    <title>かき揚げ応援ボタン</title>
     <style>
         body {
-            background: url('[画像URL]') no-repeat center;
-            background-size: cover;
+            background: #D3D3D3;
             color: white;
             text-align: center;
             font-family: Arial, sans-serif;
+            margin: 0;
         }
-        .container { margin: 50px; }
-        #output, #myText { font-size: 24px; margin: 20px; text-shadow: 2px 2px black; }
+        .container { margin: 5vw; }
+        #output, #myText { 
+            font-size: 20px; 
+            margin: 20px; 
+            text-shadow: 2px 2px black; 
+        }
         button { 
-            padding: 10px; 
-            font-size: 18px; 
+            padding: 1rem 2rem; 
+            font-size: 1.1rem; 
             background: pink; 
-            border: 2px solid white; 
-            margin: 10px; 
+            border: 0.4vw solid white; 
+            margin: 2vw; 
             cursor: pointer; 
+            max-width: 90%;
         }
         button:hover { transform: scale(1.1); }
-        input { padding: 5px; font-size: 16px; }
+        input { 
+            padding: 1vw; 
+            font-size: 3vw; 
+        }
+.game-link {
+    text-align: center;
+    margin-top: 3vw;
+}
+.game-link a {
+    color: #ffcc00;              /* 明るめで映える色 */
+    text-decoration: underline;  /* 下線ありでリンクっぽさ */
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: inline-block;
+}
+.game-link a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+input {
+    padding: 0.5vw; /* パディング減らす */
+    font-size: 2vw; /* フォント小さく */
+    width: 20vw; /* 幅調整 */
+}
+
+  @media (max-width: 600px) {
+            #output, #myText { font-size: 6vw; }
+            button { 
+                font-size: 5vw; 
+                padding: 3vw;    
+            }
+       input {
+              font-size: 1rem;
+              padding: 0.5rem;
+              width: 60%;
+               max-width: 300px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>カキアゲ応援ボタン</h1>
+        <h1>かき揚げ応援ボタン</h1>
         <button onclick="showtext()">めんどくせえボタン</button>
         <div id="output"></div>
         <button id="myButton">押してみて！</button>
         <p id="myText">ここが変わる！</p>
         <input id="myInput" placeholder="君の名前">
     </div>
-    <audio id="sound" src="[音URL]"></audio>
 
     <script>
-        // めんどくせえボタン
         let messages = [
             "マジめんどくせえ！",
-            "死にたいけどAIやばくね？",
-            "投げ出してやりてぇ！",
-            "毎日無駄にしたぜ！",
+            "○にたいけどAIやばくね？",
+            "やったぜ、これ見てくれ！",
+            "何年も無駄にしたぜ！",
             "全部バカみたいだ！"
         ];
         function showtext() {
             let randomindex = Math.floor(Math.random() * messages.length);
             document.getElementById("output").innerText = messages[randomindex];
-            let sound = document.getElementById("sound");
-            sound.muted = false;
-            sound.play();
         }
 
-        // 押してみて！ボタン
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
             let color = '#';
@@ -73,11 +109,15 @@
                 const name = input.value || "君";
                 text.innerText = `${name}、JSできた！ AGIパワー！`;
                 text.style.color = getRandomColor();
-                let sound = document.getElementById("sound");
-                sound.muted = false;
-                sound.play();
             });
         }
     </script>
+
+<div class="game-link">
+  <a href="index.html">
+       <p>トップへ戻る</p>
+  </a>
+</div>
+
 </body>
 </html>
