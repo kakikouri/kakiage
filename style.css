@@ -39,3 +39,12 @@ header {
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
+
+@media (max-width: 600px) {
+  .image-card {
+    width: 90%;
+  }
+}
+
+
+
