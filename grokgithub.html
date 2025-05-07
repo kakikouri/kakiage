@@ -6,75 +6,18 @@
 <meta http-equiv="Expires" content="0">
 
     <title>かき揚げ応援ボタン</title>
-    <style>
-        body {
-            background: #D3D3D3;
-            color: white;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
-        .container { margin: 5vw; }
-        #output, #myText { 
-            font-size: 20px; 
-            margin: 20px; 
-            text-shadow: 2px 2px black; 
-        }
-        button { 
-            padding: 1rem 2rem; 
-            font-size: 1.1rem; 
-            background: pink; 
-            border: 0.4vw solid white; 
-            margin: 2vw; 
-            cursor: pointer; 
-            max-width: 90%;
-        }
-        button:hover { transform: scale(1.1); }
+    <link rel="stylesheet" href="style.css">
         
-.game-link {
-    text-align: center;
-    margin-top: 3vw;
-}
-.game-link a {
-    color: #ffcc00;              /* 明るめで映える色 */
-    text-decoration: underline;  /* 下線ありでリンクっぽさ */
-    font-weight: bold;
-    font-size: 1.2rem;
-    display: inline-block;
-}
-.game-link a:hover {
-    color: #fff;
-    text-decoration: none;
-}
-input {
-    padding: 0.5vw; /* パディング減らす */
-    font-size: 2vw; /* フォント小さく */
-    width: 20vw; /* 幅調整 */
-}
-
- @media (max-width: 600px) {
-    #output, #myText { font-size: 16px !important; }
-    button { 
-        font-size: 14px !important; 
-        padding: 8px !important;    
-    }
-    input {
-        font-size: 12px !important;
-        padding: 4px !important;
-        width: 60% !important;
-        max-width: 300px !important;
-    }
-}
-    </style>
 </head>
-<body>
-    <div class="container">
+<body class="kuro=body">
+    <div class="kuro-container">
+
         <h1>かき揚げ応援ボタン</h1>
-        <button onclick="showtext()">めんどくせえボタン</button>
-        <div id="output"></div>
-        <button id="myButton">押してみて！</button>
-        <p id="myText">ここが変わる！</p>
-        <input id="myInput" placeholder="君の名前">
+        <button class="kuro-button" onclick="showtext()">めんどくせえボタン</button>
+        <div id="output" class="kuro-output"></div>
+        <button id="myButton" class="kuro-button">押してみて！</button>
+        <p id="myText" class="kuro-myText">ここが変わる！</p>
+        <input id="myInput" class="kuro-input" placeholder="君の名前">
     </div>
 
     <script>
@@ -114,7 +57,7 @@ input {
         }
     </script>
 
-<div class="game-link">
+<div class="kuro-game-link">
   <a href="index.html">
        <p>トップへ戻る</p>
   </a>

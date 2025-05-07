@@ -133,5 +133,69 @@ footer {
   }
 }
 
-
+.kuro-body {
+    background: #333;
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+.kuro-container { 
+    margin: 20px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 80vh; /* 縦中央、スマホで自然に */
+}
+.kuro-output, .kuro-myText { 
+    font-size: 20px; 
+    margin: 20px; 
+    text-shadow: 2px 2px black; 
+}
+.kuro-button { 
+    padding: 10px 20px; 
+    font-size: 16px; 
+    background: pink; 
+    border: 2px solid white; 
+    margin: 10px; 
+    cursor: pointer; 
+    max-width: 300px; /* 縦長防止 */
+    width: auto; /* 自然な幅 */
+}
+.kuro-button:hover { font-weight: bold; }
+.kuro-input { 
+    padding: 5px; 
+    font-size: 14px; 
+    width: 200px; 
+}
+.kuro-game-link {
+    text-align: center;
+    margin-top: 15px;
+}
+.kuro-game-link a {
+    color: #ffcc00;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-block;
+}
+.kuro-game-link a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+@media (max-width: 600px) {
+    .kuro-output, .kuro-myText { font-size: 16px; }
+    .kuro-button { 
+        font-size: 14px; 
+        padding: 8px; 
+        max-width: 250px; /* スマホで縦長防止 */
+    }
+    .kuro-input {
+        font-size: 12px;
+        padding: 4px;
+        width: 60%;
+        max-width: 300px;
+    }
+}
 
