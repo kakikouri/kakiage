@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- スマホスケール -->
     <title>かき揚げ応援ボタン</title>
     <link rel="stylesheet" href="style.css">
-        
 </head>
-<body class="kuro=body">
+<body class="kuro-body">
     <div class="kuro-container">
-
         <h1>かき揚げ応援ボタン</h1>
         <button class="kuro-button" onclick="showtext()">めんどくせえボタン</button>
         <div id="output" class="kuro-output"></div>
@@ -19,7 +17,6 @@
         <p id="myText" class="kuro-myText">ここが変わる！</p>
         <input id="myInput" class="kuro-input" placeholder="君の名前">
     </div>
-
     <script>
         let messages = [
             "マジめんどくせえ！🐶",
@@ -29,10 +26,14 @@
             "全部バカみたいだ！🐶"
         ];
         function showtext() {
-            let randomindex = Math.floor(Math.random() * messages.length);
-            document.getElementById("output").innerText = messages[randomindex];
+            const output = document.getElementById('output');
+            if (output) {
+                let randomindex = Math.floor(Math.random() * messages.length);
+                output.innerText = messages[randomindex];
+            } else {
+                console.log("エラー: output要素が見つからない");
+            }
         }
-
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
             let color = '#';
@@ -41,27 +42,21 @@
             }
             return color;
         }
-
-        const button = document.getElementById("myButton");
-        const text = document.getElementById("myText");
-        const input = document.getElementById("myInput");
-
+        const button = document.getElementById('myButton');
+        const text = document.getElementById('myText');
+        const input = document.getElementById('myInput');
         if (!button || !text || !input) {
-            console.log("エラー！ HTMLのID確認してね！");
+            console.log("エラー: HTMLのIDが欠けてる（myButton, myText, myInput）");
         } else {
-            button.addEventListener("click", () => {
+            button.addEventListener('click', () => {
                 const name = input.value || "君";
-                text.innerText = `${name}、JSできた！ AGIパワー！`;
+                text.innerText = `${name}、JSできた！ AGIパワー！😺`;
                 text.style.color = getRandomColor();
             });
         }
     </script>
-
-<div class="kuro-game-link">
-  <a href="index.html">
-       <p>トップへ戻る</p>
-  </a>
-</div>
-
+    <div class="kuro-game-link">
+        <a href="index.html"><p>トップへ戻る</p></a>
+    </div>
 </body>
 </html>
