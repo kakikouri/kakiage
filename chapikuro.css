@@ -1,0 +1,68 @@
+body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .profile {
+      background-color: #f5deb3;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .profile img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    .profile h2 {
+      text-align: center;
+      font-size: 1.5em;
+      margin: 10px 0;
+      color: #666;
+    }
+    .profile p {
+      font-size: 1em;
+      line-height: 1.6;
+    }
+
+.game-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.game-link a {
+  text-decoration: none;
+  color: inherit;
+}
+.game-link a:hover {
+  text-decoration: underline;
+}
+
+.game-link p {
+  font-size: 1rem;
+}
+
+    .section-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      color: #888;
+    }
+    .quote {
+      background-color: #ffefd5;
+      border-left: 5px solid #aaccee;
+      padding: 10px;
+      margin: 10px 0;
+      font-style: italic;
+    }
