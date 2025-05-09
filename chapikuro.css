@@ -11,7 +11,7 @@ body {
       padding: 20px;
     }
     .profile {
-      background-color: #f5deb3;
+      background-color: #ffebcd;
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 20px;
@@ -60,9 +60,10 @@ body {
       color: #888;
     }
     .quote {
-      background-color: #ffefd5;
+      background-color: #fdf5e6;
       border-left: 5px solid #aaccee;
       padding: 10px;
       margin: 10px 0;
-      font-style: italic;
-    }
+ }
+
+
