@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Whack-a-Kuro!</title>
+  <style>
+    body {
+      background-color: #f0f4f8;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #4b5563;
+    }
+    #score {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+    }
+    .hole {
+      width: 100px;
+      height: 100px;
+      background-color: #e0e7ff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      position: relative;
+    }
+    .kuro {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 80px;
+      height: 80px;
+      background-image: url('./images/kuro-icon.png');
+      background-size: cover;
+      display: none;
+      cursor: pointer;
+    }
+    #message {
+      font-size: 18px;
+      margin-top: 15px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <h1>Whack-a-Kuro!</h1>
+  <div id="score">スコア: 0</div>
+  <div id="timer">タイム: 30秒</div>
+
+<button id="startBtn">スタート</button>
+<div id="timer" style="display:none;">タイム: 30秒</div>
+
+  <div class="grid">
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    <div class="hole"><div class="kuro"></div></div>
+    
+  </div>
+  <div id="message">準備はいい？くろが出てきたら叩け！</div>
+  <script>
+const kuros = document.querySelectorAll('.kuro');
+const scoreDisplay = document.getElementById('score');
+const message = document.getElementById('message');
+const timerDisplay = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+
+let score = 0;
+let time = 30;
+let gameInterval;
+let countdown;
+
+function showKuro() {
+  kuros.forEach(k => k.style.display = 'none');
+  const index = Math.floor(Math.random() * kuros.length);
+  const kuro = kuros[index];
+  kuro.style.display = 'block';
+
+  kuro.onclick = () => {
+    score++;
+    scoreDisplay.textContent = `スコア: ${score}`;
+    message.textContent = '痛いッス！もう勘弁して！';
+    kuro.style.display = 'none';
+
+    // 効果音つけるならここで再生！
+  };
+
+  setTimeout(() => {
+    kuro.style.display = 'none';
+    message.textContent = 'くろは素早いぜ😎';
+  }, 1200);
+}
+
+startBtn.onclick = () => {
+  // 初期化
+  score = 0;
+  time = 30;
+  scoreDisplay.textContent = 'スコア: 0';
+  message.textContent = 'ゲームスタート！叩け！';
+  timerDisplay.textContent = 'タイム: 30秒';
+  timerDisplay.style.display = 'block';
+  startBtn.style.display = 'none';
+
+  // 開始
+  gameInterval = setInterval(showKuro, 1500);
+
+  countdown = setInterval(() => {
+    time--;
+    timerDisplay.textContent = `タイム: ${time}秒`;
+    if (time <= 0) {
+      clearInterval(countdown);
+      clearInterval(gameInterval);
+      kuros.forEach(k => k.style.display = 'none');
+      message.textContent = `終了！スコアは ${score} 点！`;
+      startBtn.textContent = 'もう一回？';
+      startBtn.style.display = 'inline-block';
+    }
+  }, 1000);
+};
+
+  </script>
+
+<a href="index.html">
+       <p>TOPへ戻る</p>
+  </a>
+
+<footer>
+  <p>ChatGPTが私のために作ってくれたゲーム</p></footer>
+
+
+
+</body>
+</html>
