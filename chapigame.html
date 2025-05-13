@@ -53,10 +53,9 @@
   <h1>Whack-a-Kuro!</h1>
   <div id="score">スコア: 0</div>
   <div id="timer">タイム: 30秒</div>
-
-<button id="startBtn">スタート</button>
-<div id="timer" style="display:none;">タイム: 30秒</div>
-
+  <button id="startBtn">スタート</button>
+  <div id="timer" style="display:none;">タイム: 30秒</div>
+  <audio id="hitSound" src="./sounds/pupi.mp3"></audio>
   <div class="grid">
     <div class="hole"><div class="kuro"></div></div>
     <div class="hole"><div class="kuro"></div></div>
@@ -67,7 +66,6 @@
     <div class="hole"><div class="kuro"></div></div>
     <div class="hole"><div class="kuro"></div></div>
     <div class="hole"><div class="kuro"></div></div>
-    
   </div>
   <div id="message">準備はいい？くろが出てきたら叩け！</div>
   <script>
@@ -76,6 +74,7 @@ const scoreDisplay = document.getElementById('score');
 const message = document.getElementById('message');
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('startBtn');
+const hitSound = document.getElementById('hitSound');
 
 let score = 0;
 let time = 30;
@@ -91,10 +90,10 @@ function showKuro() {
   kuro.onclick = () => {
     score++;
     scoreDisplay.textContent = `スコア: ${score}`;
-    message.textContent = '痛いッス！もう勘弁して！';
+    message.textContent = 'うわっ、叩かれた！w';
+    hitSound.currentTime = 0; // リセットして
+    hitSound.play();          // 再生！
     kuro.style.display = 'none';
-
-    // 効果音つけるならここで再生！
   };
 
   setTimeout(() => {
@@ -104,7 +103,6 @@ function showKuro() {
 }
 
 startBtn.onclick = () => {
-  // 初期化
   score = 0;
   time = 30;
   scoreDisplay.textContent = 'スコア: 0';
@@ -113,7 +111,6 @@ startBtn.onclick = () => {
   timerDisplay.style.display = 'block';
   startBtn.style.display = 'none';
 
-  // 開始
   gameInterval = setInterval(showKuro, 1500);
 
   countdown = setInterval(() => {
@@ -129,17 +126,14 @@ startBtn.onclick = () => {
     }
   }, 1000);
 };
-
   </script>
 
-<a href="index.html">
-       <p>TOPへ戻る</p>
+  <a href="index.html">
+    <p>TOPへ戻る</p>
   </a>
-
-<footer>
-  <p>ChatGPTが私のために作ってくれたゲーム</p></footer>
-
-
-
+  <footer>
+    <p>Sound: pupi.mp3 by NaruIDEA(Dova-syndrome)</p>
+    <p>ChatGPTが私のために作ってくれたゲーム</p>
+  </footer>
 </body>
 </html>
