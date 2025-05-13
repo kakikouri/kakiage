@@ -35,6 +35,53 @@ body {
       line-height: 1.6;
     }
 
+.highlighted-post {
+  background-color: #f9f9ff;
+  padding: 1em;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 600px;
+  margin: 2em auto;
+}
+
+.highlighted-post img {
+  width: 100%;
+  border-radius: 8px;
+}
+.quote-card {
+  background-color: #fff;
+  border-left: 6px solid #8bb4f5;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.quote-card p {
+  font-size: 1rem;
+  margin: 0 0 0.5em 0;
+}
+
+.quote-meta {
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+}
+
+
+.tag {
+  display: inline-block;
+  background-color: #e0e7ff;
+  color: #4c51bf;
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  margin-right: 5px;
+}
+
+
+
 .game-link {
   text-align: center;
   margin-top: 2rem;
