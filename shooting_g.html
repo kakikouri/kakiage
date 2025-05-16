@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- スマホでちゃんと見えるように -->
+  <title>生意気キッドのシューティング</title>
+  <style>
+    body { margin: 0; background: #1a1a3d; overflow: hidden; } /* 宇宙っぽい暗い背景 */
+    canvas { display: block; margin: 0 auto; } /* ゲーム画面を中央に */
+    #score { position: absolute; top: 10px; left: 10px; color: #ffd700; font-family: Arial; font-size: 24px; } /* スコア表示 */
+    #lives { position: absolute; top: 40px; left: 10px; color: #ffd700; font-family: Arial; font-size: 24px; } /* ライフ表示用のスタイル */
+
+    #resetButton { 
+      display: none; /* 最初は非表示 */
+      position: absolute; 
+      top: 60%; /* 画面の少し下 */
+      left: 50%; 
+      transform: translate(-50%, -50%); /* 中央に */
+      padding: 10px 20px; 
+      font-size: 18px; 
+      background: #ff007a; /* キッドのピンク！ */
+      color: #fff; 
+      border: none; 
+      cursor: pointer; 
+      border-radius: 5px; 
+    }
+
+    #resetButton:hover { background: #ff4da6; } /* ホバーで色変化 */
+ 
+    #homeLink {
+      display: none;
+      position: absolute;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #ff007a;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #homeLink:hover { background: #ff4da6; }
+　　
+　　#shootSound { display: none; }/* オーディオを非表示 */
+
+    #credits { position: 
+               fixed; bottom: 0; 
+               width: 100%; 
+               text-align: center; 
+               background: rgba(0, 0, 0, 0.5); 
+               color: #fff; 
+               padding: 10px; 
+               font-size: 14px; 
+               z-index: 1; 
+             }
+    #score, #lives, #resetButton, #homeLink { z-index: 10; }
+     canvas { margin-bottom: 30px; }
+
+    /* スマホでも見やすいように */
+    @media (max-width: 600px) {
+      canvas { width: 100%; height: auto; }
+     #resetButton { font-size: 16px; padding: 8px 16px; } /* スマホ対応 */
+     #homeLink { font-size: 16px; padding: 8px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="score">スコア: 0</div>
+  <div id="lives">ライフ: 3</div> <!-- ライフ表示用のHTML -->
+  <canvas id="gameCanvas"></canvas>
+  <button id="resetButton">もう一回！</button> <!-- リセットボタン -->
+  <a id="homeLink" href="index.html">トップに戻る</a>
+　<audio id="shootSound" src="./sounds/shot_2.mp3"></audio> <!-- ピュンピュン音 -->
+
+  <script>
+    // ゲームの基本設定
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 400; // ゲーム画面の幅
+    canvas.height = 600; // ゲーム画面の高さ
+    let score = 0; // スコア
+    let lives = 3; // ライフを3つに設定
+　　const shootSound = document.getElementById('shootSound'); // 効果音
+    let lastEnemyTime = Date.now(); // 最後に敵が出た時間
+    const enemySpawnInterval = 3000; // 3秒（ミリ秒）
+
+
+    // プレイヤー（生意気キッド）の設定
+    const player = {
+      x: canvas.width / 2, // 最初は画面中央
+      y: canvas.height - 50, // 画面下の方
+      width: 40, // キッドのサイズ
+      height: 40,
+      speed: 5 // 移動スピード
+    };
+
+    // 弾の設定
+    let bullets = []; // キッドが撃つ弾を管理
+    const bulletSpeed = 10; // 弾のスピード
+    const bulletWidth = 5;
+    const bulletHeight = 10;
+
+    // 敵（宇宙ゴミ）の設定
+    let enemies = []; // 敵を管理
+    const enemyWidth = 30;
+    const enemyHeight = 30;
+    let enemySpeed = 1;
+
+    // キーボード操作
+    let leftPressed = false;
+    let rightPressed = false;
+    let spacePressed = false;
+
+    // キーを押したとき
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') leftPressed = true;
+      if (e.key === 'ArrowRight') rightPressed = true;
+      if (e.key === ' ') spacePressed = true;
+    });
+
+    // キーを離したとき
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowLeft') leftPressed = false;
+      if (e.key === 'ArrowRight') rightPressed = false;
+      if (e.key === ' ') spacePressed = false;
+    });
+
+    // タッチイベント（スマホ対応：移動と発射）
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault(); // スクロール防止
+      if (!shootSound.paused) shootSound.pause(); // 再生中の音を停止
+      shootSound.currentTime = 0;
+      shootSound.play().catch(() => {}); // 音の制限解除
+      const touch = e.touches[0]; // 最初のタッチポイント
+      const rect = canvas.getBoundingClientRect(); // キャンバスの位置
+      const touchX = touch.clientX - rect.left; // キャンバス内のX座標
+      spacePressed = true; // タップ中は弾を撃つ
+
+    // キッドの位置をタッチ位置に（中央に合わせ、端を制限）
+      player.x = Math.max(0, Math.min(canvas.width - player.width, touchX - player.width / 2));
+});
+     canvas.addEventListener('touchmove', (e) => {
+       e.preventDefault(); // スクロール防止
+       const touch = e.touches[0];
+       const rect = canvas.getBoundingClientRect();
+       const touchX = touch.clientX - rect.left;
+     // 指を動かしてもキッドがついてくる
+        player.x = Math.max(0, Math.min(canvas.width - player.width, touchX - player.width / 2));
+});
+canvas.addEventListener('touchend', (e) => {
+  e.preventDefault(); // スクロール防止
+  spacePressed = false; // タップ離したら弾停止
+});
+
+
+    // 弾を撃つ
+    function shootBullet() {
+      if (spacePressed) {
+        bullets.push({
+          x: player.x + player.width / 2 - bulletWidth / 2, // キッドの中心から発射
+          y: player.y,
+          width: bulletWidth,
+          height: bulletHeight
+        });
+         try {
+           shootSound.currentTime = 0;
+           shootSound.play();
+         } catch (e) {
+           console.log('音再生エラー:', e); // エラーをログに
+        }     
+      }
+    }
+
+    // 敵を作る
+    function createEnemy() {
+      enemies.push({
+        x: Math.random() * (canvas.width - enemyWidth), // ランダムな位置
+        y: 0, // 画面上から登場
+        width: enemyWidth,
+        height: enemyHeight
+      });
+    }
+
+ // ゲームをリセットする関数
+    function resetGame() {
+       score = 0; // スコアを0に戻す
+       lives = 3; // ライフを3に戻す
+       player.x = canvas.width / 2; // プレイヤーを中央に戻す
+       bullets = []; // 弾を全部消す
+       enemies = []; // 敵を全部消す
+       enemySpeed = 1;
+       lastEnemyTime = Date.now(); // タイマーリセット
+       document.getElementById('score').textContent = `スコア: ${score}`; // スコア表示を更新
+       document.getElementById('lives').textContent = `ライフ: ${lives}`; // ライフ表示を更新
+       document.getElementById('resetButton').style.display = 'none'; // ボタンを隠す
+       document.getElementById('homeLink').style.display = 'none';
+       requestAnimationFrame(gameLoop); // ループをスムーズに再開
+  }
+
+    // ゲームのメインループ
+    function gameLoop() {
+      // 画面をクリア
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // プレイヤー（キッド）を動かす
+     if (!spacePressed) { // タッチ中（spacePressed）はスキップ
+      if (leftPressed && player.x > 0) player.x -= player.speed; // 左移動
+      if (rightPressed && player.x < canvas.width - player.width) player.x += player.speed; // 右移動
+  }
+      // キッドを描く（スケボー乗ってるイメージ）
+      ctx.fillStyle = '#ff007a'; // キッドはピンクで派手！
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+      ctx.fillStyle = '#fff'; // スケボーのホイール
+      ctx.fillRect(player.x + 10, player.y + 35, 5, 5);
+      ctx.fillRect(player.x + 25, player.y + 35, 5, 5);
+
+      // 弾を動かす
+      bullets.forEach((bullet, index) => {
+        bullet.y -= bulletSpeed; // 弾を上に
+        ctx.fillStyle = '#ffd700'; // 弾は金色
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        if (bullet.y < 0) bullets.splice(index, 1); // 画面外なら消す
+      });
+
+      // 敵を動かす
+      enemies.forEach((enemy, index) => {
+        enemy.y += enemySpeed; // 敵を下に
+        ctx.fillStyle = '#00ffcc'; // 敵は青緑
+        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        if (enemy.y > canvas.height) enemies.splice(index, 1); // 画面外なら消す
+      });
+
+      // 弾と敵の衝突チェック
+      bullets.forEach((bullet, bIndex) => {
+        enemies.forEach((enemy, eIndex) => {
+          if (
+            bullet.x < enemy.x + enemy.width &&
+            bullet.x + bullet.width > enemy.x &&
+            bullet.y < enemy.y + enemy.height &&
+            bullet.y + bullet.height > enemy.y
+        ) {
+            // 衝突したら弾と敵を消す
+            bullets.splice(bIndex, 1);
+            enemies.splice(eIndex, 1);
+            score += 10; // スコアアップ
+            document.getElementById('score').textContent = `スコア: ${score}`;
+         // スコア100ごとにスピードアップ（最大3）
+          if (score % 100 === 0) {
+             enemySpeed = Math.min(3, enemySpeed + 0.2); // 0.2ずつ増加
+            }
+           }
+        });
+      });
+
+             // プレイヤーと敵の衝突チェック
+        enemies.forEach((enemy, eIndex) => {
+         if (
+             player.x < enemy.x + enemy.width &&
+             player.x + player.width > enemy.x &&
+             player.y < enemy.y + enemy.height &&
+             player.y + player.height > enemy.y
+          ) {
+             enemies.splice(eIndex, 1); // 当たった敵を消す
+             lives -= 1; // ライフを1減らす
+             document.getElementById('lives').textContent = `ライフ: ${lives}`; // ライフ表示を更新
+      }
+    });
+
+// ゲームオーバーチェック
+    if (lives <= 0) {
+      ctx.fillStyle = '#ff0000'; // 赤で「Game Over」を表示
+      ctx.font = '48px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2);
+      document.getElementById('resetButton').style.display = 'block'; // リセットボタンを表示
+      document.getElementById('homeLink').style.display = 'block';
+      return; // ゲームを止める（requestAnimationFrameを呼ばない）
+    }
+      // 敵をランダムに作る
+      if (Math.random() < 0.01) {
+        createEnemy(); // 1%の確率で敵出現
+        lastEnemyTime = Date.now(); // 敵が出たらタイマー更新
+}
+       // 敵が0で3秒経過したら強制出現
+      if (enemies.length === 0 && Date.now() - lastEnemyTime > enemySpawnInterval) {
+        createEnemy();
+        lastEnemyTime = Date.now();
+  }
+
+      // ゲームを続ける
+      requestAnimationFrame(gameLoop);
+    }
+
+    // 弾を定期的に撃つ
+    setInterval(shootBullet, 300); // 0.3秒ごとに弾チェック
+
+ // リセットボタンのクリックイベント
+  document.getElementById('resetButton').addEventListener('click', resetGame);
+
+    // ゲーム開始
+    gameLoop();
+
+  </script>
+<footer id="credits">音提供: written by Make a field Music (dova-syndrome)</footer>
+
+</body>
+</html>
