@@ -104,11 +104,33 @@
     button:hover {
       background-color: #777;
     }
+    #game-over {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      padding-top: 100px;
+      box-sizing: border-box;
+    }
+    @media (min-width: 768px) {
+      #game-over {
+        font-size: 24px;
+        padding-top: 120px;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="score">Score: 0</div>
-  <div id="game-board"></div>
+  <div id="game-board">
+    <div id="game-over">動かせるパズルがないよ！<br>リセットしてね！</div>
+  </div>
   <div class="button-container">
     <button id="reset-button">リセット</button>
     <button id="home-button">ホームに戻る</button>
@@ -163,6 +185,7 @@
       score = 0;
       comboCount = 0;
       document.getElementById('score').textContent = `Score: ${score}`;
+      document.getElementById('game-over').style.display = 'none';
       renderBoard();
     }
 
@@ -204,6 +227,36 @@
       }
       console.log('Found initial matches:', matches);
       return matches;
+    }
+
+    function isGameStuck() {
+      for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+          const directions = [
+            { di: -1, dj: 0 }, // 上
+            { di: 1, dj: 0 },  // 下
+            { di: 0, dj: -1 }, // 左
+            { di: 0, dj: 1 },  // 右
+            { di: -1, dj: -1 }, // 左上
+            { di: -1, dj: 1 },  // 右上
+            { di: 1, dj: -1 },  // 左下
+            { di: 1, dj: 1 },   // 右下
+          ];
+          for (const { di, dj } of directions) {
+            const ni = i + di;
+            const nj = j + dj;
+            if (ni >= 0 && ni < boardSize && nj >= 0 && nj < boardSize) {
+              [board[i][j], board[ni][nj]] = [board[ni][nj], board[i][j]];
+              const matches = findMatches();
+              [board[i][j], board[ni][nj]] = [board[ni][nj], board[i][j]];
+              if (matches.length > 0) {
+                return false;
+              }
+            }
+          }
+        }
+      }
+      return true;
     }
 
     function renderBoard() {
@@ -363,6 +416,10 @@
           const { row1, col1, row2, col2 } = swapped;
           [board[row1][col1], board[row2][col2]] = [board[row2][col2], board[row1][col1]];
           renderBoard();
+          if (isGameStuck()) {
+            console.log('Game is stuck!');
+            document.getElementById('game-over').style.display = 'block';
+          }
         }
       }
     }
@@ -381,7 +438,7 @@
           board[row][col] = null;
         });
         fillBoard();
-      }, 700);
+      }, 350);
       const baseScore = 100;
       const comboBonus = (comboCount - 1) * 50;
       score += matches.length * (baseScore + comboBonus);
@@ -416,13 +473,11 @@
       checkMatches();
     }
 
-    // リセットボタンのイベントリスナー
     document.getElementById('reset-button').addEventListener('click', () => {
       console.log('Resetting game...');
       initBoard();
     });
 
-    // ホームに戻るボタンのイベントリスナー
     document.getElementById('home-button').addEventListener('click', () => {
       window.location.href = 'index.html';
     });
@@ -430,10 +485,5 @@
     initBoard();
     renderBoard();
   </script>
-
-
-<footer>
-  <p>このパズルゲームはxAIのGrok3がコードを作成しました。</p></footer>
-
 </body>
 </html>
