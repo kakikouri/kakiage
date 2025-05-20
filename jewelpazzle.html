@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     body {
-      background-color: lightgray;
+      background-color: #fffacd;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -14,16 +14,25 @@
       margin: 0;
       font-family: Arial, sans-serif;
     }
+
+  
+    h1 {
+        color: #8b4513;
+        margin-bottom: 10px;
+         font-size: 1.5rem; 
+    }
+
     #game-board {
       display: grid;
       grid-template-columns: repeat(6, 48px);
       grid-gap: 2px;
-      background-color: #222;
+      background-color: #d2b48c;
       padding: 10px;
       width: fit-content;
       position: relative;
       overflow: hidden;
       min-height: 298px;
+      border-radius: 20px; 
     }
     @media (min-width: 768px) {
       #game-board {
@@ -79,8 +88,8 @@
       to { transform: translateY(0); opacity: 1; }
     }
     #score {
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
+      background-color: #DAA520;
+      color: #333;
       padding: 6px 10px;
       border-radius: 6px;
       margin-bottom: 10px;
@@ -97,12 +106,12 @@
       cursor: pointer;
       border: none;
       border-radius: 5px;
-      background-color: #555;
+      background-color: #8B4513;
       color: white;
       transition: background-color 0.2s;
     }
     button:hover {
-      background-color: #777;
+      background-color: #A52A2A;
     }
     #game-over {
       display: none;
@@ -127,6 +136,7 @@
   </style>
 </head>
 <body>
+<h1>POMPOMゲームパズル</h1>
   <div id="score">Score: 0</div>
   <div id="game-board">
     <div id="game-over">動かせるパズルがないよ！<br>リセットしてね！</div>
