@@ -33,6 +33,9 @@
       overflow: hidden;
       min-height: 298px;
       border-radius: 20px; 
+      touch-action: none;
+}
+
     }
     @media (min-width: 768px) {
       #game-board {
@@ -148,6 +151,7 @@
   <script>
     const boardSize = 6;
     const colors = ['pompom', 'kojyake', 'palco', 'pen', 'egg', 'prin'];
+    const matchSound = new Audio('sounds/kirakira.mp3');
     let board = [];
     let selectedGem = null;
     let score = 0;
@@ -413,6 +417,8 @@
         }
       }
       if (matches.size > 0) {
+        matchSound.currentTime = 0;
+        matchSound.play();
         comboCount++;
         const matchArray = Array.from(matches).map(pos => {
           const [row, col] = pos.split(',').map(Number);
@@ -448,7 +454,7 @@
           board[row][col] = null;
         });
         fillBoard();
-      }, 350);
+      }, 400);
       const baseScore = 100;
       const comboBonus = (comboCount - 1) * 50;
       score += matches.length * (baseScore + comboBonus);
@@ -489,7 +495,7 @@
     });
 
     document.getElementById('home-button').addEventListener('click', () => {
-      window.location.href = 'index.html';
+      window.location.href = 'gamepage.html';
     });
 
     initBoard();
@@ -498,6 +504,7 @@
 
 <footer>
   <p>ゲームコード：xAIのGrok3作成　デザインスタイル：ChatGPT</p>
+<p>効果音：Make a field Music by DOVA-SYNDROME</p>
 <p>使用しているイラストのキャラクターは「スプラトゥーン３サーモンラン」の二次創作です。作品の著作権は任天堂にあります。</p>
 </footer>
 
