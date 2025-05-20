@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神経衰弱ゲーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        .card.flipped {
+            background-color: #2ecc71;
+            font-size: 24px;
+            transform: rotateY(180deg);
+        }
+        .card.matched {
+            background-color: #27ae60;
+            cursor: default;
+        }
+        #score {
+            font-size: 24px;
+            margin: 20px;
+        }
+        #message {
+            font-size: 20px;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>神経衰弱ゲーム</h1>
+    <div id="score">スコア: 0</div>
+    <div><button onclick="initGame()">リセットしてシャッフル</button></div>
+    <div id="game-board"></div>
+    <div id="message"></div>
+
+    <script>
+        const gameBoard = document.getElementById('game-board');
+        const scoreDisplay = document.getElementById('score');
+        const messageDisplay = document.getElementById('message');
+        let cards = [];
+        let flippedCards = [];
+        let score = 0;
+        let matchedPairs = 0;
+
+        // カードの値（1-8を2枚ずつ、計16枚）
+        const cardValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
+
+        // カードをシャッフル
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ゲーム初期化
+        function initGame() {
+            gameBoard.innerHTML = '';
+            cards = [];
+            flippedCards = [];
+            score = 0;
+            matchedPairs = 0;
+            scoreDisplay.textContent = `スコア: ${score}`;
+            messageDisplay.textContent = '';
+            const shuffledValues = shuffle([...cardValues]);
+
+            shuffledValues.forEach((value, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.value = value;
+                card.dataset.index = index;
+                card.addEventListener('click', flipCard);
+                gameBoard.appendChild(card);
+                cards.push(card);
+            });
+        }
+
+        // カードをめくる
+        function flipCard() {
+            if (flippedCards.length < 2 && !flippedCards.includes(this) && !this.classList.contains('matched')) {
+                this.classList.add('flipped');
+                this.textContent = this.dataset.value;
+                flippedCards.push(this);
+
+                if (flippedCards.length === 2) {
+                    setTimeout(checkMatch, 1000);
+                }
+            }
+        }
+
+        // 一致判定とスコア加算
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.value === card2.dataset.value) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                score += 10; // 一致したらスコアに+10
+                scoreDisplay.textContent = `スコア: ${score}`;
+                matchedPairs++;
+                if (matchedPairs === cardValues.length / 2) {
+                    messageDisplay.textContent = `ゲームクリア！最終スコア: ${score}`;
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '';
+                card2.textContent = '';
+            }
+            flippedCards = [];
+        }
+
+        // ゲーム開始
+        initGame();
+    </script>
+
+<div class="game-link">
+  <a href="gamepage.html">
+       <p>ゲーム部屋に戻る</p>
+  </a>
+</div>
+<footer>
+  <p>xAI-Grok3によりこのページは作られました</p>
+</footer>
+
+
+</body>
+</html>
