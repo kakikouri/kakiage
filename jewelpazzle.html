@@ -14,14 +14,11 @@
       margin: 0;
       font-family: Arial, sans-serif;
     }
-
-  
     h1 {
-        color: #8b4513;
-        margin-bottom: 10px;
-         font-size: 1.5rem; 
+      color: #8b4513;
+      margin-bottom: 10px;
+      font-size: 1.5rem;
     }
-
     #game-board {
       display: grid;
       grid-template-columns: repeat(6, 48px);
@@ -32,10 +29,8 @@
       position: relative;
       overflow: hidden;
       min-height: 298px;
-      border-radius: 20px; 
-      touch-action: manipulation;
-}
-
+      border-radius: 20px;
+      touch-action: manipulation; /* スワイプの自由度を確保 */
     }
     @media (min-width: 768px) {
       #game-board {
@@ -45,15 +40,12 @@
       .gem {
         width: 60px;
         height: 60px;
-      
-    }
-
+      }
       .gem img {
         width: 60px;
         height: 60px;
       }
- }
-
+    }
     .gem {
       width: 48px;
       height: 48px;
@@ -64,7 +56,7 @@
       border-radius: 5px;
       transition: transform 0.2s ease, opacity 0.3s ease;
       position: relative; /* アニメーション用 */
-      will-change: transform;
+      will-change: transform; /* パフォーマンス最適化 */
       touch-action: manipulation;
     }
     .gem img {
@@ -79,11 +71,11 @@
     .egg img { content: url('images/egg.png'); }
     .prin img { content: url('images/prin.png'); }
     .gem.selected {
-        transform: scale(1.1);
-        box-shadow: 0 0 8pv rgba(255, 255,255, 0.8);
-        z-index: 10;
-   }    
-     .gem.vanish {
+      transform: scale(1.1);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+      z-index: 10;
+    }
+    .gem.vanish {
       opacity: 0;
       transform: scale(1.2);
       transition: opacity 0.7s ease, transform 0.7s ease;
@@ -148,7 +140,7 @@
   </style>
 </head>
 <body>
-<h1>POMPOMゲームパズル</h1>
+  <h1>POMPOMゲームパズル</h1>
   <div id="score">Score: 0</div>
   <div id="game-board">
     <div id="game-over">動かせるパズルがないよ！<br>リセットしてね！</div>
@@ -161,16 +153,15 @@
     const boardSize = 6;
     const colors = ['pompom', 'kojyake', 'palco', 'pen', 'egg', 'prin'];
     const matchSound = new Audio('sounds/kirakira.mp3');
-    
     let board = [];
     let selectedGem = null;
     let score = 0;
     let comboCount = 0;
-    const minSwipeDistance = 10;
+    const minSwipeDistance = 10; // 感度アップ！
+    let isProcessing = false; // 連続スワイプ防止
     let touchStart = null;
-    let isProcessing = false;  
-        
-   function initBoard() {
+
+    function initBoard() {
       for (let i = 0; i < boardSize; i++) {
         board[i] = [];
         for (let j = 0; j < boardSize; j++) {
@@ -321,9 +312,8 @@
     }
 
     function handleTouchStart(event) {
-     
-      if (isProcessing) return; 
-      event.preventDefault(); 
+      if (isProcessing) return; // 処理中ならスルー
+      event.preventDefault(); // デフォルト動作をブロック
       const row = parseInt(event.target.closest('.gem').dataset.row);
       const col = parseInt(event.target.closest('.gem').dataset.col);
       if (!board[row] || !board[row][col]) return;
@@ -331,37 +321,30 @@
       console.log(`Touch start: (${row}, ${col})`);
       const gem = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
       gem.classList.add('selected');
-
     }
 
     function handleTouchEnd(event) {
-      if (!touchStart) return;
-      isProcessing = true;
+      if (!touchStart || isProcessing) return;
+      isProcessing = true; // 処理開始
+      event.preventDefault();
       const touchEndX = event.changedTouches[0].clientX;
       const touchEndY = event.changedTouches[0].clientY;
       const dx = touchEndX - touchStart.x;
       const dy = touchEndY - touchStart.y;
-      const minSwipeDistance = 20;
-      if (Math.abs(dx) < minSwipeDistance && Math.abs(dy) < minSwipeDistance) {
-        touchStart = null;
-        return;
-      }
       let targetRow = touchStart.row;
       let targetCol = touchStart.col;
       const absDx = Math.abs(dx);
       const absDy = Math.abs(dy);
-
-if (absDx > minSwipeDistance || absDy > minSwipeDistance) {
-    if (absDx > absDy && absDx > minSwipeDistance) {
-      targetCol += dx > 0 ? 1 : -1; // 左右
-    } else if (absDy > minSwipeDistance) {
-      targetRow += dy > 0 ? 1 : -1; // 上下
-    }
-  }
+      if (absDx > minSwipeDistance || absDy > minSwipeDistance) {
+        if (absDx > absDy && absDx > minSwipeDistance) {
+          targetCol += dx > 0 ? 1 : -1; // 左右
+        } else if (absDy > minSwipeDistance) {
+          targetRow += dy > 0 ? 1 : -1; // 上下
+        }
+      }
       const isAdjacent =
-    (Math.abs(targetRow - touchStart.row) === 1 && targetCol === touchStart.col) ||
-    (Math.abs(targetCol - touchStart.col) === 1 && targetRow === touchStart.row);
-
+        (Math.abs(targetRow - touchStart.row) === 1 && targetCol === touchStart.col) ||
+        (Math.abs(targetCol - touchStart.col) === 1 && targetRow === touchStart.row);
       if (
         isAdjacent &&
         targetRow >= 0 &&
@@ -370,23 +353,18 @@ if (absDx > minSwipeDistance || absDy > minSwipeDistance) {
         targetCol < boardSize &&
         board[targetRow][targetCol]
       ) {
-        console.log(`Touch swap: (${touchStart.row}, ${touchStart.col}) to (${targetRow}, ${targetCol})`);
+        console.log(`Swipe swap: (${touchStart.row}, ${touchStart.col}) to (${targetRow}, ${targetCol})`);
         animateSwipe(touchStart.row, touchStart.col, targetRow, targetCol, () => {
-        swapGems(touchStart.row, touchStart.col, targetRow, targetCol);
-});
-  } else {
-    // 無効なスワイプなら選択解除
-    document.querySelector('.selected')?.classList.remove('selected');
- 
-    }
+          swapGems(touchStart.row, touchStart.col, targetRow, targetCol);
+        });
+      } else {
+        document.querySelector('.selected')?.classList.remove('selected');
+      }
       touchStart = null;
-     setTimeout(() => {
-    isProcessing = false; // 0.3秒後に次のスワイプを許可
-    }, 300);
-
+      setTimeout(() => {
+        isProcessing = false; // 0.3秒後に次のスワイプを許可
+      }, 300);
     }
-
-
 
     function handleGemSelect(row, col, element) {
       if (!board[row] || !board[row][col]) return;
@@ -525,26 +503,25 @@ if (absDx > minSwipeDistance || absDy > minSwipeDistance) {
       checkMatches();
     }
 
-function animateSwipe(row1, col1, row2, col2, callback) {
-  const gem1 = document.querySelector(`[data-row="${row1}"][data-col="${col1}"]`);
-  const gem2 = document.querySelector(`[data-row="${row2}"][data-col="${col2}"]`);
-  if (!gem1 || !gem2) return callback();
-  const gemSize = window.innerWidth >= 768 ? 60 : 48;
-  const dx = (col2 - col1) * gemSize;
-  const dy = (row2 - row1) * gemSize;
-  gem1.style.transition = 'transform 0.2s ease';
-  gem2.style.transition = 'transform 0.2s ease';
-  gem1.style.transform = `translate(${dx}px, ${dy}px)`;
-  gem2.style.transform = `translate(${-dx}px, ${-dy}px)`;
-  setTimeout(() => {
-    gem1.style.transition = '';
-    gem2.style.transition = '';
-    gem1.style.transform = '';
-    gem2.style.transform = '';
-    callback();
-  }, 200);
-}
-
+    function animateSwipe(row1, col1, row2, col2, callback) {
+      const gem1 = document.querySelector(`[data-row="${row1}"][data-col="${col1}"]`);
+      const gem2 = document.querySelector(`[data-row="${row2}"][data-col="${col2}"]`);
+      if (!gem1 || !gem2) return callback();
+      const gemSize = window.innerWidth >= 768 ? 60 : 48;
+      const dx = (col2 - col1) * gemSize;
+      const dy = (row2 - row1) * gemSize;
+      gem1.style.transition = 'transform 0.2s ease';
+      gem2.style.transition = 'transform 0.2s ease';
+      gem1.style.transform = `translate(${dx}px, ${dy}px)`;
+      gem2.style.transform = `translate(${-dx}px, ${-dy}px)`;
+      setTimeout(() => {
+        gem1.style.transition = '';
+        gem2.style.transition = '';
+        gem1.style.transform = '';
+        gem2.style.transform = '';
+        callback();
+      }, 200);
+    }
 
     document.getElementById('reset-button').addEventListener('click', () => {
       console.log('Resetting game...');
@@ -558,13 +535,10 @@ function animateSwipe(row1, col1, row2, col2, callback) {
     initBoard();
     renderBoard();
   </script>
-
-<footer>
-  <p>ゲームコード：xAIのGrok3作成　デザインスタイル：ChatGPT</p>
-<p>効果音：Make a field Music by DOVA-SYNDROME</p>
-<p>使用しているイラストのキャラクターは「スプラトゥーン３サーモンラン」の二次創作です。作品の著作権は任天堂にあります。</p>
-</footer>
-
-
+  <footer>
+    <p>ゲームコード：xAIのGrok3作成　デザインスタイル：ChatGPT</p>
+    <p>効果音：Make a field Music by DOVA-SYNDROME</p>
+    <p>使用しているイラストのキャラクターは「スプラトゥーン３サーモンラン」の二次創作です。作品の著作権は任天堂にあります。</p>
+  </footer>
 </body>
 </html>
