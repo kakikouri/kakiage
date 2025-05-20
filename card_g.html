@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>神経衰弱ゲーム</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
-        }
+       body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0; /* そのまま */
+    padding: 5px; /* 10px→5pxで余白減らす */
+}
         #game-board {
             display: grid;
             grid-template-columns: repeat(4, 100px);
@@ -47,6 +49,30 @@
             font-size: 20px;
             color: #e74c3c;
         }
+@media (max-width: 600px) {
+    #game-board {
+        grid-template-columns: repeat(4, 70px); /* 80px→70pxで小さく */
+        gap: 6px; /* 8px→6pxで間隔縮小 */
+        margin: 10px auto; /* マージン減らす */
+    }
+    .card {
+        width: 70px;
+        height: 70px;
+    }
+}
+@media (max-width: 400px) { /* 超狭い画面用 */
+    #game-board {
+        grid-template-columns: repeat(4, 60px);
+        gap: 5px;
+    }
+    .card {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+
+
     </style>
 </head>
 <body>
