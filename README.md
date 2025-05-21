@@ -20,3 +20,10 @@ All sound effects and BGM are from [DOVA-SYNDROME](https://dova-s.jp/), a free m
 一部の設計およびコードは、ChatGPT（ちゃぴ）の支援を受けています。  
 ホームページの作成は、すべてAIのツールによって行われました。  
 使用している効果音およびBGMは、すべてフリー音楽素材配布サイト[DOVA-SYNDROME](https://dova-s.jp/)のものを使用しています。
+
+Some portions of the code were generated with the assistance of Grok (Grok-3 by xAI).  
+This project is non-commercial and created as a personal AI-supported experiment.  
+No redistribution or commercial use is intended without appropriate permission.
+
+「本プロジェクトの一部コードは、xAIのGrok-3（くろ）の支援により生成されています。
+本作品は非営利目的のAI共同実験として作成されたものであり、再配布や商用利用は意図していません。」
