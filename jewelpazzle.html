@@ -143,6 +143,7 @@
 
 </head>
 <body>
+<h1>POMPOMパズルゲーム</h1>
   <div id="score">Score: 0</div>
   <div id="game-board">
     <div id="game-over">動かせるパズルがないよ！<br>リセットしてね！</div>
@@ -457,7 +458,7 @@
           board[row][col] = null;
         });
         fillBoard();
-      }, 400);
+      }, 350);
       const baseScore = 100;
       const comboBonus = (comboCount - 1) * 50;
       score += matches.length * (baseScore + comboBonus);
