@@ -78,8 +78,8 @@
     }
     .gem.vanish {
       opacity: 0;
-      transform: scale(1.2);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: scale(0.8);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
     .gem.empty {
       opacity: 0;
@@ -458,7 +458,7 @@
           board[row][col] = null;
         });
         fillBoard();
-      }, 350);
+      }, 400);
       const baseScore = 100;
       const comboBonus = (comboCount - 1) * 50;
       score += matches.length * (baseScore + comboBonus);
