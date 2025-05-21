@@ -3,6 +3,7 @@
 <head>
   <title>シンプルジュエルゲーム</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     body {
       background-color: #fffacd;
@@ -13,8 +14,7 @@
       min-height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
-      overscroll-behavior: none; /* ページ全体のスクロールを抑制 */
-      touch-action: none; /* ページのデフォルトタッチをブロック */
+      overscroll-behavior: none;
     }
     h1 {
       color: #8b4513;
@@ -32,7 +32,7 @@
       overflow: hidden;
       min-height: 298px;
       border-radius: 20px;
-      touch-action: none; /* ゲームボードでタッチを完全制御 */
+      touch-action: none;
     }
     @media (min-width: 768px) {
       #game-board {
@@ -56,7 +56,7 @@
       justify-content: center;
       cursor: pointer;
       border-radius: 5px;
-      transition: transform 0.15s ease, opacity 0.3s ease; /* アニメーションを少し速く */
+      transition: transform 0.15s ease, opacity 0.3s ease;
       position: relative;
       will-change: transform;
     }
@@ -140,9 +140,9 @@
       }
     }
   </style>
+
 </head>
 <body>
-  <h1>POMPOMゲームパズル</h1>
   <div id="score">Score: 0</div>
   <div id="game-board">
     <div id="game-over">動かせるパズルがないよ！<br>リセットしてね！</div>
@@ -159,8 +159,6 @@
     let selectedGem = null;
     let score = 0;
     let comboCount = 0;
-    const minSwipeDistance = 15; // 感度を微調整
-    let isProcessing = false;
     let touchStart = null;
 
     function initBoard() {
@@ -244,7 +242,7 @@
           }
         }
       }
-      console.log('Found matches:', matches);
+      console.log('Found initial matches:', matches);
       return matches;
     }
 
@@ -296,8 +294,8 @@
             gem.removeEventListener('touchstart', handleTouchStart);
             gem.removeEventListener('touchend', handleTouchEnd);
             gem.addEventListener('click', handleGemClick);
-            gem.addEventListener('touchstart', handleTouchStart, { passive: false });
-            gem.addEventListener('touchend', handleTouchEnd, { passive: false });
+            gem.addEventListener('touchstart', handleTouchStart, { passive: true });
+            gem.addEventListener('touchend', handleTouchEnd, { passive: true });
             if (!gems[index]) gameBoard.appendChild(gem);
             console.log(`Rendered: (${i}, ${j}), color: ${currentColor || 'empty'}`);
           }
@@ -314,39 +312,30 @@
     }
 
     function handleTouchStart(event) {
-      if (isProcessing) return;
-      event.preventDefault();
       const row = parseInt(event.target.closest('.gem').dataset.row);
       const col = parseInt(event.target.closest('.gem').dataset.col);
       if (!board[row] || !board[row][col]) return;
       touchStart = { row, col, x: event.touches[0].clientX, y: event.touches[0].clientY };
       console.log(`Touch start: (${row}, ${col})`);
-      const gem = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-      gem.classList.add('selected');
     }
 
     function handleTouchEnd(event) {
-      if (!touchStart || isProcessing) return;
-      isProcessing = true;
-      event.preventDefault();
+      if (!touchStart) return;
       const touchEndX = event.changedTouches[0].clientX;
       const touchEndY = event.changedTouches[0].clientY;
       const dx = touchEndX - touchStart.x;
       const dy = touchEndY - touchStart.y;
+      const minSwipeDistance = 20;
+      if (Math.abs(dx) < minSwipeDistance && Math.abs(dy) < minSwipeDistance) {
+        touchStart = null;
+        return;
+      }
       let targetRow = touchStart.row;
       let targetCol = touchStart.col;
-      const absDx = Math.abs(dx);
-      const absDy = Math.abs(dy);
-      if (absDx > minSwipeDistance || absDy > minSwipeDistance) {
-        if (absDx > absDy && absDx > minSwipeDistance) {
-          targetCol += dx > 0 ? 1 : -1; // 左右
-        } else if (absDy > absDx && absDy > minSwipeDistance) {
-          targetRow += dy > 0 ? 1 : -1; // 上下
-        } else if (absDx > minSwipeDistance && absDy > minSwipeDistance) {
-          // 斜めスワイプ
-          targetRow += dy > 0 ? 1 : -1;
-          targetCol += dx > 0 ? 1 : -1;
-        }
+      if (Math.abs(dx) > Math.abs(dy)) {
+        targetCol += dx > 0 ? 1 : -1;
+      } else {
+        targetRow += dy > 0 ? 1 : -1;
       }
       const isAdjacent =
         (Math.abs(targetRow - touchStart.row) === 1 && targetCol === touchStart.col) ||
@@ -360,17 +349,10 @@
         targetCol < boardSize &&
         board[targetRow][targetCol]
       ) {
-        console.log(`Swipe swap: (${touchStart.row}, ${touchStart.col}) to (${targetRow}, ${targetCol})`);
-        animateSwipe(touchStart.row, touchStart.col, targetRow, targetCol, () => {
-          swapGems(touchStart.row, touchStart.col, targetRow, targetCol);
-        });
-      } else {
-        document.querySelector('.selected')?.classList.remove('selected');
+        console.log(`Touch swap: (${touchStart.row}, ${touchStart.col}) to (${targetRow}, ${targetCol})`);
+        swapGems(touchStart.row, touchStart.col, targetRow, targetCol);
       }
       touchStart = null;
-      setTimeout(() => {
-        isProcessing = false;
-      }, 150); // クールダウンを短縮
     }
 
     function handleGemSelect(row, col, element) {
@@ -387,9 +369,7 @@
           (Math.abs(col - prevCol) === 1 && row === prevRow) ||
           (Math.abs(row - prevRow) === 1 && Math.abs(col - prevCol) === 1);
         if (isAdjacent) {
-          animateSwipe(prevRow, prevCol, row, col, () => {
-            swapGems(prevRow, prevCol, row, col);
-          });
+          swapGems(prevRow, prevCol, row, col);
         }
         document.querySelector('.selected')?.classList.remove('selected');
         selectedGem = null;
@@ -399,7 +379,6 @@
     function swapGems(row1, col1, row2, col2) {
       console.log(`Swapping: (${row1}, ${col1}) with (${row2}, ${col2})`);
       [board[row1][col1], board[row2][col2]] = [board[row2][col2], board[row1][col1]];
-      console.log('Board after swap:', board);
       checkMatches({ row1, col1, row2, col2 });
       renderBoard();
     }
@@ -440,12 +419,11 @@
           }
         }
       }
-      console.log(`Checking matches, found: ${matches.size}`, matches);
       if (matches.size > 0) {
-        matchSound.currentTime = 0;
-        matchSound.play();
-        comboCount++;
-        const matchArray = Array.from(matches).map(pos => {
+         matchSound.currentTime = 0;
+         matchSound.play();
+         comboCount++;
+         const matchArray = Array.from(matches).map(pos => {
           const [row, col] = pos.split(',').map(Number);
           return { row, col };
         });
@@ -455,7 +433,6 @@
         comboCount = 0;
         if (swapped) {
           const { row1, col1, row2, col2 } = swapped;
-          console.log('No matches, reverting swap');
           [board[row1][col1], board[row2][col2]] = [board[row2][col2], board[row1][col1]];
           renderBoard();
           if (isGameStuck()) {
@@ -515,42 +492,24 @@
       checkMatches();
     }
 
-    function animateSwipe(row1, col1, row2, col2, callback) {
-      const gem1 = document.querySelector(`[data-row="${row1}"][data-col="${col1}"]`);
-      const gem2 = document.querySelector(`[data-row="${row2}"][data-col="${col2}"]`);
-      if (!gem1 || !gem2) return callback();
-      const gemSize = window.innerWidth >= 768 ? 60 : 48;
-      const dx = (col2 - col1) * gemSize;
-      const dy = (row2 - row1) * gemSize;
-      gem1.style.transition = 'transform 0.15s ease';
-      gem2.style.transition = 'transform 0.15s ease';
-      gem1.style.transform = `translate(${dx}px, ${dy}px)`;
-      gem2.style.transform = `translate(${-dx}px, ${-dy}px)`;
-      setTimeout(() => {
-        gem1.style.transition = '';
-        gem2.style.transition = '';
-        gem1.style.transform = '';
-        gem2.style.transform = '';
-        callback();
-      }, 150);
-    }
-
     document.getElementById('reset-button').addEventListener('click', () => {
       console.log('Resetting game...');
       initBoard();
     });
 
     document.getElementById('home-button').addEventListener('click', () => {
-      window.location.href = 'gamepage.html';
+      window.location.href = 'index.html';
     });
 
     initBoard();
     renderBoard();
   </script>
-  <footer>
+
+ <footer>
     <p>ゲームコード：xAIのGrok3作成　デザインスタイル：ChatGPT</p>
     <p>効果音：Make a field Music by DOVA-SYNDROME</p>
     <p>使用しているイラストのキャラクターは「スプラトゥーン３サーモンラン」の二次創作です。作品の著作権は任天堂にあります。</p>
   </footer>
+
 </body>
 </html>
