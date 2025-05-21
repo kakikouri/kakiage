@@ -72,18 +72,18 @@
         font-weight: bold;
         font-size: 0.9rem; /* →→→ スマホで読みやすく →→→ */
     }
-    #game-board {
-        display: grid;
-        grid-template-columns: repeat(6, 50px); 
-        grid-template-rows: repeat(6, 50px);
-        gap: 2px;
-        background-color: #d2b48c;/* ゲームボードの背景色 */
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        box-sizing: content-box; /* パディングがグリッドに影響しない */
-        max-width: 420px; 
-    }
+   #game-board {
+    display: grid;
+    grid-template-columns: repeat(6, 50px); 
+    grid-template-rows: repeat(6, 50px);
+    gap: 2px;
+    background-color: #d2b48c;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-sizing: content-box;
+    max-width: 320px; 
+}
     .jewel {
         width: 50px;
         height:50px;
@@ -183,19 +183,19 @@
            body {
            padding: 10px 0;
        }
-            #game-board {
-            gap: 1.5vw;
-            grid-template-columns: repeat(6, 14vw);
-            grid-template-rows: repeat(6, 14vw);
-            padding: 2vw;
-            max-width: 92vw;
-        }
+           #game-board {
+        gap: 1.5vw;
+        grid-template-columns: repeat(6, 14vw);
+        grid-template-rows: repeat(6, 14vw);
+        padding: 2vw;
+        max-width: 92vw;
+    }
 
-        .jewel {
-            width: 14vw; /* →→→ 追加：スマホ対応 →→→ */
-            height: 14vw;
-            border-radius: 1.5vw; /* →→→ 追加：スマホで丸み調整 →→→ */
-        }
+         .jewel {
+        width: 14vw; /* 大きさを変更 */
+        height: 14vw;
+        border-radius: 1.5vw;
+    }
 
           h1 {
               font-size: 1.3rem; /* タイトルサイズ調整 */
@@ -244,7 +244,15 @@
         const statusMessage = document.getElementById('status-message');
         const restartButton = document.getElementById('restart-button');
         const hintButton = document.getElementById('hint-button');
-
+ const boardSize = 6;
+        const jewelTypes = ['pen.png', 'egg.png', 'pompom.png', 'palco.png', 'prin.png','kojyake.png'];
+        let score = 0;
+        let comboMultiplier = 1;
+        let comboChain = 0;
+        let selectedJewel = null;
+        let gameBoard = [];
+        let isProcessing = false;
+        let hintTimeout = null;
         
 // ★音再生関数
 function playMatchSound() {
@@ -265,16 +273,7 @@ function playMatchSound() {
         // エラーを無視して続行
     }
 }       
-        // ゲーム設定
-        const boardSize = 6;
-        const jewelTypes = ['pom.png', 'pen.png', 'egg.png', 'pompom.png', 'palco.png', 'prin.png','kojyake.png'];
-        let score = 0;
-        let comboMultiplier = 1;
-        let comboChain = 0;
-        let selectedJewel = null;
-        let gameBoard = [];
-        let isProcessing = false;
-        let hintTimeout = null;
+              
         
         // 盤面初期化
         function initializeBoard() {
@@ -1008,3 +1007,4 @@ helpButton.addEventListener('click', () => {
 
 </body>
 </html>
+
