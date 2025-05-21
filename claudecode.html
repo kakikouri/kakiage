@@ -13,7 +13,7 @@
             background-color: #fffacd;
             width: 100%;
             margin: 0;            
-            min-height: 100vh; 
+            min-height: 100vh; /* 画面全体を使う */
              box-sizing: border-box;
              padding: 0; 
           
@@ -24,7 +24,7 @@
     h1 {
         color: #8b4513;
         margin-bottom: 10px;
-         font-size: 1.5rem; 
+         font-size: 1.5rem; /* スマホで小さめに */
     }
 
 
@@ -35,30 +35,30 @@
     text-align: center;
 }
 .help-btn {
-    display: inline-block;  
-    width: 25px !important; 
+    display: inline-block;  /* ブロックレベル要素として扱う */
+    width: 25px !important; /* important を追加して優先適用 */
     height: 25px !important;
-    min-width: unset;      
-    max-width: 25px;       
-    border-radius: 0;      
+    min-width: unset;      /* 他のボタンスタイルの影響を無効化 */
+    max-width: 25px;       /* 最大幅も設定 */
+    border-radius: 0;      /* 四角形に */
     background: #8b4513;
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 0.8rem;      
+    font-size: 0.8rem;       /* フォントサイズも少し大きく */
     vertical-align: middle;
     margin-left: 5px;
     padding: 0;
-    line-height: 25px;      
-    box-sizing: border-box; 
+    line-height: 25px;      /* 行の高さも合わせて調整 */
+    box-sizing: border-box; /* ボックスサイズの計算方法を明示 */
 }
     .game-info {
         margin-bottom: 5px;
-        font-size: 0.9rem;
+        font-size: 0.9rem;/* スマホで小さめ、約14px */
         display: flex;
         justify-content: space-between;
-        width: 90vw;
-        max-width: 400px;
+        width: 90vw;/* 画面幅の90%でスマホにフィット */
+        max-width: 400px; /* PCでは400pxまで */
     }
     #score, #combo {
         font-weight: bold;
@@ -70,18 +70,18 @@
         height: 20px;
         color: #d32f2f;
         font-weight: bold;
-        font-size: 0.9rem; 
+        font-size: 0.9rem; /* →→→ スマホで読みやすく →→→ */
     }
     #game-board {
         display: grid;
         grid-template-columns: repeat(6, 50px); 
         grid-template-rows: repeat(6, 50px);
         gap: 2px;
-        background-color: #d2b48c;
+        background-color: #d2b48c;/* ゲームボードの背景色 */
         padding: 10px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        box-sizing: content-box; 
+        box-sizing: content-box; /* パディングがグリッドに影響しない */
         max-width: 420px; 
     }
     .jewel {
@@ -95,30 +95,31 @@
         cursor: pointer;
         user-select: none;
         transition: all 0.3s;
-        margin: 0; 
-        box-sizing: border-box; 
-        overflow: hidden;
-        background-color: transparent; 
+        margin: 0; /* 宝石のマージンゼロ */
+        box-sizing: border-box; /* サイズ厳密 */
+        overflow: hidden; /* 画像はみ出し防止 */
+        background-color: transparent; /* 透過背景 */
         font-size: 0;            
      }
 
      .jewel img {
-        width: 100%; 
+        width: 100%; /* →→→ 50px→100%で縮小 →→→ */
         height: 100%;
         object-fit: contain;
-        display: block; 
+        display: block; /* →→→ 追加：絵文字抑制 →→→ */
 
     }
      .jewel img[alt] {
-        font-size: 0; 
-  }
+        font-size: 0; /* →→→ 追加：altテキスト非表示 →→→ */
+}
      .selected {
         transform: scale(0.8);
-        box-shadow: 0 0 8px 4px gold;
+        box-shadow: 0 0 8px 4px gold;/* →→→ 復元：既存、入れ子削除 →→→ */
     }
 
      .falling {
-    animation: fallAnimation 0.5s ease-in; 
+    animation: fallAnimation 0.5s ease-in; /* →→→ 復元：既存、入れ子削除 →→→ */
+    }
       @keyframes fallAnimation {
         0% {
             transform: translateY(-50px);
@@ -146,7 +147,7 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        min-width: 120px; 
+        min-width: 120px; /* →→→ 追加：タッチしやすく →→→ */
     }
     button:hover {
         background-color: #8e24aa;
@@ -165,7 +166,8 @@
             box-shadow: 0 0 3px 1px white;
         }
     }
- .credit {
+ /* →→→ ここに.credit追加！既存の{}は消さない！ →→→ */
+.credit {
     margin-top: 10px;
     font-size: 0.8rem; 
     color: #8b4513;
@@ -173,13 +175,13 @@
     width: 90vw;
     max-width: 400px;
 }
-
+/* →→→ 追加終わり →→→ */
 
  @media screen and (max-width: 600px) {
 
 
            body {
-           padding: 10px 0;/* モバイルでの余白調整 */
+           padding: 10px 0;
        }
             #game-board {
             gap: 1.5vw;
@@ -187,18 +189,16 @@
             grid-template-rows: repeat(6, 14vw);
             padding: 2vw;
             max-width: 92vw;
-            margin: 0 auto;
         }
 
         .jewel {
-            width: 14vw; 
+            width: 14vw; /* →→→ 追加：スマホ対応 →→→ */
             height: 14vw;
-            border-radius: 1.5vw;
-            font-size: 0; 
+            border-radius: 1.5vw; /* →→→ 追加：スマホで丸み調整 →→→ */
         }
 
           h1 {
-              font-size: 1.3rem; 
+              font-size: 1.3rem; /* タイトルサイズ調整 */
          }
         .buttons {
             margin-top: 3vw;
@@ -210,7 +210,7 @@
         }
         .credit {
             margin-top: 3vw;
-        } 
+        } /* →→→ 既存：スマホOK →→→ */
     }</style></head>
 <body>
     <h1>POMPOM合わせゲーム</h1>
@@ -222,7 +222,7 @@
 
     <div class="game-info">
         <div>スコア: <span id="score">0</span></div>
-        <div>連鎖: <span id="combo">0</span></div>
+        <div>連鎖: <span id="combo">0</span>倍</div>
     </div>
     <div id="status-message"></div>
     <div id="game-board">
@@ -234,7 +234,7 @@
     <button id="hint-button">ヒントを表示</button>
 </div>
 
-<div class="credit">Sound: kirakira.mp3 by Make a field Music (Dova-syndrome)</div>
+<div class="credit">Sound: kirakira.mp3 by Make a field Music (Dova-syndrome)</div> <!-- →→→ 修正：作曲者統一 →→→ -->
 
 <script>
     document.addEventListener('DOMContentLoaded', () =>{
@@ -245,32 +245,26 @@
         const restartButton = document.getElementById('restart-button');
         const hintButton = document.getElementById('hint-button');
 
-// モバイル対応強化 - スワイプ防止 - イベントリスナーは一度だけ設定
-document.body.addEventListener('touchmove', function(e) {
-    if (isProcessing) {
-        e.preventDefault();
-    }
-}, { passive: false });
-
         
 // ★音再生関数
 function playMatchSound() {
     const sound = new Audio('kirakira.mp3');
     sound.volume = 0.3; // 音量30%
     
-       sound.onerror = () => {
+    // エラーハンドリングを改善
+    sound.onerror = () => {
         console.log('音声ファイルが見つかりません');
         // 音声ファイルがない場合は静かにエラーを処理
     };
 
-      try {
-        sound.play().catch((e) => {
-            console.error('音声再生エラー:', e);
-        });
-    } catch (e) {
-        console.error('音声再生エラー:', e);
+    
+    try {
+        sound.play();
+    } catch(e) {
+        console.log('音再生エラー:', e);
+        // エラーを無視して続行
     }
-}   
+}       
         // ゲーム設定
         const boardSize = 6;
         const jewelTypes = ['pom.png', 'pen.png', 'egg.png', 'pompom.png', 'palco.png', 'prin.png','kojyake.png'];
@@ -285,14 +279,14 @@ function playMatchSound() {
         // 盤面初期化
         function initializeBoard() {
             isProcessing = true;
-            board.innerHTML = ''; 
-            board.style.display = 'grid'; 
+            board.innerHTML = ''; // combo-notification削除、完全リセット
+            board.style.display = 'grid'; // グリッド強制
             gameBoard = [];
             score = 0;
             comboMultiplier = 1;
             comboChain = 0;
             scoreElement.textContent = score;
-            comboElement.textContent = '1'; 
+            comboElement.textContent = '1'; // 初期表示を「1」に
             statusMessage.textContent = '';
             clearTimeout(hintTimeout);
              selectedJewel = null; 
@@ -311,7 +305,7 @@ function playMatchSound() {
                     );
                     
                     gameBoard[row][col] = jewelType;
-                   createJewelElement(row, col, jewelType); 
+                   createJewelElement(row, col, jewelType); // ★jewelを代入！
 
                 }
             }
@@ -321,9 +315,17 @@ function playMatchSound() {
                 if (!findPossibleMove()) {
                     shuffleBoard();
                 }
+               
+              // 追加するコード:
+// モバイル対応強化 - スワイプ防止 
+document.body.addEventListener('touchmove', function(e) {
+    if (isProcessing) {
+        e.preventDefault();
+    }
+}, { passive: false });
 
 
-                isProcessing = false;
+ isProcessing = false;
 
             }, 500);
         }
@@ -337,27 +339,26 @@ function playMatchSound() {
         function createJewelElement(row, col, jewelType) {
             const jewel = document.createElement('div');
             jewel.className = 'jewel';
-            jewel.style.backgroundColor = 'transparent'; 
+            jewel.style.backgroundColor = 'transparent'; // 背景透過
             jewel.dataset.row = row;
             jewel.dataset.col = col;
-            jewel.style.gridRow = `${row + 1} / span 1`;
-            jewel.style.gridColumn = `${col + 1} / span 1`;
+            jewel.style.gridRow = `${row + 1} / span 1`; // →→→ 修正：直接指定 →→→
+            jewel.style.gridColumn = `${col + 1} / span 1`; // →→→ 修正：直接指定 →→→
             jewel.style.margin = '0';
       
            // 画像を追加
                const img = document.createElement('img');
-              img.alt = jewelType.replace('.png', ''); 
-               img.style.objectFit = 'contain'; // 
+              img.alt = jewelType.replace('.png', ''); // 代替テキスト設定
+               img.style.objectFit = 'contain'; // 枠内に収める
                img.onerror = () => {
              // 画像ロード失敗時のフォールバック
-              jewel.style.backgroundColor = '#f8d7da'; 
-              jewel.style.color = '#721c24'; 
-              jewel.style.fontSize = '16px';
+              jewel.style.backgroundColor = '#f8d7da'; // エラー色をわかりやすく
+              jewel.style.color = '#721c24'; // テキスト色
+              jewel.style.fontSize = '16px'; // フォントサイズ
               jewel.style.display = 'flex';
               jewel.style.alignItems = 'center';
               jewel.style.justifyContent = 'center';
-              jewel.style.borderRadius = '8px';
-              jewel.textContent = jewelType.replace('.png', '').charAt(0).toUpperCase();
+              jewel.textContent = '?'; // より目立つ表示
                console.log(`画像読み込みエラー: ${jewelType}`);
                 }; 
                  img.src = jewelType; // src設定はonerrorの後がベスト
@@ -371,13 +372,15 @@ function playMatchSound() {
             });
 
 
-     jewel.addEventListener('touchstart', (e) => {
+ // →→→ ここにタッチイベント入れる！ →→→
+    jewel.addEventListener('touchstart', (e) => {
         e.preventDefault(); // スクロール防止
         if (!isProcessing) {
             handleJewelClick(jewel, row, col);
         }
     });
-    
+    // →→→ タッチイベント終わり →→→
+
             board.appendChild(jewel);
             return jewel;
         }
@@ -464,7 +467,7 @@ function playMatchSound() {
                 const row = parseInt(jewel.dataset.row);
                 const col = parseInt(jewel.dataset.col);
                 const img = jewel.querySelector('img');
-                img.src = gameBoard[row][col];
+                img.src = gameBoard[row][col]; // 画像パス（shiyun1.pngなど）
             });
         }
         
@@ -613,7 +616,8 @@ function playMatchSound() {
         
 function updateComboDisplay() {
 if (comboMultiplier > 1) {
-                
+        comboElement.textContent = `${comboMultiplier}コンボ！+${5 * comboChain}点`;
+        
         // アニメーション効果
         comboElement.textContent = `${comboMultiplier}倍`;
         comboElement.style.transition = 'transform 0.2s ease-in-out';
@@ -622,12 +626,14 @@ if (comboMultiplier > 1) {
         setTimeout(() => {
             comboElement.style.transform = 'scale(1)';
         }, 200);
-    } else if (comboMultiplier === 1) {
-        comboElement.textContent = '1倍';
         
+        // 3秒後に元に戻す
+        setTimeout(() => {
+            comboElement.textContent = '1';
+        }, 3000);
     } else {
-        comboElement.textContent = '';
-    } 
+        comboElement.textContent = comboMultiplier;
+    }
 }
 
 
@@ -711,8 +717,7 @@ function fillEmptySpaces() {
             updateScore(5 * comboChain);
             
             setTimeout(() => fillEmptySpaces(), 300);
-      
-          } else {
+        } else {
             // 連続マッチの制限 - 無限ループ防止
             if (comboChain > 15) {
                 statusMessage.textContent = "すごい連鎖！新しい盤面にリセットします！";
@@ -721,8 +726,6 @@ function fillEmptySpaces() {
                     return;
                 }, 2000);
             } else {
-
-
                 // コンボリセット
                 comboChain = 0;
                 comboMultiplier = 1;
