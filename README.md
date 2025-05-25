@@ -27,3 +27,21 @@ No redistribution or commercial use is intended without appropriate permission.
 
 「本プロジェクトの一部コードは、xAIのGrok-3（くろ）の支援により生成されています。
 本作品は非営利目的のAI共同実験として作成されたものであり、再配布や商用利用は意図していません。」
+
+⚠️ Image Usage and Copyright Notice
+
+This game includes fan-made images based on characters from *Splatoon*, a video game series owned by Nintendo.  
+All rights to these characters and visual elements belong to Nintendo.  
+These images are used as part of a non-commercial, personal project for illustrative purposes only.  
+Please do not reuse or redistribute these images outside of this repository.  
+If Nintendo or a representative requests their removal, we will comply immediately.
+
+⚠️ 画像利用と著作権について
+
+本ゲームには、任天堂のゲームシリーズ「スプラトゥーン」に登場するキャラクターを元にした、  
+ファンによる二次創作画像が含まれています。  
+これらのキャラクターおよび視覚的要素に関する権利はすべて任天堂に帰属します。  
+本プロジェクトは非営利かつ個人的な目的で制作されており、使用画像は説明的な目的に限って使用しています。  
+これらの画像の再配布や、本リポジトリ外での使用はご遠慮ください。  
+もし任天堂または関係者から削除要請があった場合は、速やかに対応いたします。
+
