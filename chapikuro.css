@@ -115,6 +115,16 @@ body {
 }
 
 
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #999;
+  padding: 1rem 0;
+}
+
+
+
+
 @media (max-width: 600px) {
    .quote {
     padding: 10px;
